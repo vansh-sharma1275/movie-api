@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Movie Search App</title>
+
+  <!-- Bootstrap 5 -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+
+  <style>
+    body{
+      background:#f4f4f4;
+    }
+
+    .movie-card img{
+      height:350px;
+      object-fit:cover;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container py-5">
+
+  <h1 class="text-center mb-4">
+    Movie Search App
+  </h1>
+
+  <!-- Search -->
+  <div class="row justify-content-center mb-5">
+
+    <div class="col-md-6">
+
+      <div class="input-group">
+
+        <input
+          type="text"
+          id="movieInput"
+          class="form-control"
+          placeholder="Enter movie name"
+        >
+
+        <button
+          class="btn btn-primary"
+          onclick="searchMovie()"
+        >
+          Search
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Result -->
+  <div class="row" id="movieContainer"></div>
+
+</div>
+
+<script>
+
+async function searchMovie(){
+
+  const movieName =
+    document.getElementById("movieInput").value;
+
+  const container =
+    document.getElementById("movieContainer");
+
+  // YOUR API KEY
+  const apiKey = "7fac76ea";
+
+  const url =
+`https://www.omdbapi.com/?s=${movieName}&apikey=${apiKey}`;
+
+  const response = await fetch(url);
+
+  const data = await response.json();
+
+  container.innerHTML = "";
+
+  // Movie not found
+  if(data.Response === "False"){
+
+    container.innerHTML = `
+      <h3 class="text-center text-danger">
+        Movie Not Found
+      </h3>
+    `;
+
+    return;
+  }
+
+  // Show movies
+  data.Search.forEach(movie => {
+
+    container.innerHTML += `
+
+      <div class="col-md-3 mb-4">
+
+        <div class="card movie-card shadow h-100">
+
+          <img
+            src="${movie.Poster}"
+            class="card-img-top"
+          >
+
+          <div class="card-body text-center">
+
+            <h5>${movie.Title}</h5>
+
+            <p>${movie.Year}</p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+  });
+
+}
+
+</script>
+
+
+<!---movie api-https://www.omdbapi.com/apikey.aspx?utm_source=chatgpt.com-->
+
+</body>
+</html>
